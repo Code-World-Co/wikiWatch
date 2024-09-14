@@ -1,104 +1,87 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { MediaCard } from "./mediaCard";
+
 import "../style/MediaCard.css";
+import { Link } from "react-router-dom";
 import { CiGrid41 } from "react-icons/ci";
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowLeft } from "react-icons/md";
+import { CiStar } from "react-icons/ci";
+import cinePhoto from "../images/pexels-tima-miroshnichenko-7991378.jpg";
+import { useEffect, useState } from "react";
 
-export function SectionMedia(props) {
-  const [media, setMedia] = useState([]);
-  const [topleft, setTopleft] = useState(0);
-  const [topright, setTopright] = useState(5);
-  const [cardsToShow, setCardsToShow] = useState(5);
+export function MediaCard({ pinture, voteAverage }) {
+  return (
+    <div className="card">
+      <span className="label"><CiStar className="icon" />  {voteAverage}</span>
+      <img className="pinture" src={
+        pinture === undefined
+          ? cinePhoto
+          : 'https://image.tmdb.org/t/p/original' + pinture} alt="Movie Poster" />
+    </div>
+  )
+}
 
-  useEffect(() => {
-    setMedia(props.media.slice(topleft, topright));
-  }, [topleft, topright, props.media]);
+export function SectionMedia({ title, media }) {
 
-  useEffect(() => {
-    function handleResize() {
+  if (!media) {
+    return null;
+  }
+
+
+  const [slicedMedia, setSlicedMedia] = useState( media.slice(0, 0));
+
+  useEffect(()=>{
+    window.addEventListener('resize', ()=>{
       const screenWidth = window.innerWidth;
-      let newCardsToShow = 5;
-
-      if (screenWidth < 430) {
-        newCardsToShow = 1;
+      console.log(screenWidth)
+      if(screenWidth < 430){
+        setSlicedMedia(media.slice(0, 1))
+      } else if(screenWidth < 768){
+        setSlicedMedia(media.slice(0, 2))
       }
-      else  if (screenWidth < 768) {
-        newCardsToShow = 2;
-      } else if (screenWidth < 1024) {
-        newCardsToShow = 3;
-      } else if (screenWidth < 1200) {
-        newCardsToShow = 4;
+      else if(screenWidth < 1024){
+        setSlicedMedia(media.slice(0, 3))
+      }
+      else if(screenWidth < 1200){
+        setSlicedMedia(media.slice(0, 4))
       }
 
-      setCardsToShow(newCardsToShow);
-      setTopright(topleft + newCardsToShow);
-    }
+      else if(screenWidth < 1400){
+        setSlicedMedia(media.slice(0, 5))
+      }
 
-    handleResize();
+      else{
+        setSlicedMedia(media.slice(0, 6))
+      }
 
-    window.addEventListener("resize", handleResize);
+    })
+
     return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [topleft]);
-
-  const clickLeft = () => {
-    if (topleft > 0) {
-      setTopleft(topleft - cardsToShow);
-      setTopright(topright - cardsToShow);
+      window.removeEventListener('resize', ()=>{})
     }
-  };
-
-  const clickRight = () => {
-    if (topright < props.media.length) {
-      setTopleft(topleft + cardsToShow);
-      setTopright(topright + cardsToShow);
-    }
-  };
-
-  const onclick = () => {
-    window.scrollTo(0, 0);
-  };
-
+  },[])
+  
   return (
     <section className="sectionMedia">
-      <header>
-        <h1 className="title">{props.title}</h1>
-      </header>
-
-      
-
-      <section className="sectionMediaContent">
-
-      <div className="linkContainer">
-        
-        <Link className="link"  to={`/all/${props.category}/${encodeURIComponent(JSON.stringify(props.media))}`} onclick = {onclick}>
-          <CiGrid41 /> 
-        </Link>
-      </div>
-      
-        <div className="mediaContainer">
-          {media.map((medium) => {
-            return (
-              <Link key={medium.id} to={`/${props.category}/` + medium.id} onClick={onclick}>
-                <MediaCard media={medium} />
-              </Link>
-            );
-          })}
+      <header className="titleContainer">
+        <h2 className="title">{title}</h2>
+        <div className="linkContainer">
+          <Link className="link" to="/">
+             See more <CiGrid41 className="icon" /> 
+          </Link>
         </div>
-
-        <div className="buttons">
-          <div className="buttonsContainer">
-            <button onClick={clickLeft} className="button">
+      </header>
+      <section className="cardsContainer">
+        {slicedMedia.map((item) => (
+          <MediaCard key={item.id} pinture={item.poster} voteAverage={item.vote_average} />
+        ))}
+        
+            <button className="button buttonLeft">
               <MdOutlineKeyboardArrowLeft />
             </button>
-            <button onClick={clickRight} className="button">
-              <MdOutlineKeyboardArrowRight />{" "}
+            <button className="button buttonRight">
+              <MdOutlineKeyboardArrowRight />
             </button>
-          </div>
-        </div>
+          
       </section>
     </section>
-  );
+  )
 }
