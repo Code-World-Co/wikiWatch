@@ -5,9 +5,10 @@ export function Movies({ isAdult }) {
     
     return (
         <section className="movies">
-            <SectionMedia key={'popular'}  title={'Popular'}  media = {useGetDataMedia({type:'movie', category:'popular', language:'en-US'})} />
+            
             <SectionMedia key={'top_rated'} title={'Top Rated'} media = {useGetDataMedia({type:'movie', category:'top_rated', language:'en-US'})} />
-
+            <SectionMedia key={'upcoming'} title={'Upcoming'} media = {useGetDataMedia({type:'movie', category:'upcoming', language:'en-US'})} />
+            <SectionMedia key={'now_playing'} title={'Now Playing'} media = {useGetDataMedia({type:'movie', category:'now_playing', language:'en-US'})} />
         </section>
     );
 }

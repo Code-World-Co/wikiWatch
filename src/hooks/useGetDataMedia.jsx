@@ -30,19 +30,88 @@ export  function useGetDataMedia({ type, category, language}) {
                   api_key: apiKey,
                 },
               });
-              console.log(response.data)
               const result = response.data.results.map((item) => {
                 return {
                   id: item.id,
                   poster: item.poster_path,
                   vote_average: item.vote_average.toFixed(1),
+                  title: item.title || item.name,
+                  overview: item.overview
                 };
               });
-            setData(result);
-              
-            
+            setData(result); 
         }
         fetchData();
     }, [type]);
     return  data;
+}
+
+
+export function useMediaPagination(media) {
+  const arrayLength = media.length;
+  const [leftPosition, setLeftPosition] = useState(0);
+  const [rightPosition, setRightPosition] = useState(0);
+  const [slicedMedia, setSlicedMedia] = useState([]);
+
+  useEffect(() => {
+    const screenWidth = window.innerWidth;
+    let rightPos = 0;
+
+    if (screenWidth < 430) {
+      rightPos = 1;
+    } else if (screenWidth < 768) {
+      rightPos = 2;
+    } else if (screenWidth < 1024) {
+      rightPos = 3;
+    } else if (screenWidth < 1200) {
+      rightPos = 4;
+    } else if (screenWidth < 1400) {
+      rightPos = 5;
+    } else {
+      rightPos = 6;
+    }
+
+    setRightPosition(rightPos);
+    setSlicedMedia(media.slice(leftPosition, rightPos));
+
+    window.addEventListener('resize', () => {
+      const screenWidth = window.innerWidth;
+      let newRightPos = 0;
+
+      if (screenWidth < 430) {
+        newRightPos = 1;
+      } else if (screenWidth < 768) {
+        newRightPos = 2;
+      } else if (screenWidth < 1024) {
+        newRightPos = 3;
+      } else if (screenWidth < 1200) {
+        newRightPos = 4;
+      } else if (screenWidth < 1400) {
+        newRightPos = 5;
+      } else {
+        newRightPos = 6;
+      }
+
+      setRightPosition(newRightPos);
+      setSlicedMedia(media.slice(leftPosition, newRightPos));
+    });
+  }, []);
+
+  const handleLeft = () => {
+    if (leftPosition > 0) {
+      setLeftPosition(leftPosition - 6);
+      setRightPosition(rightPosition - 6);
+      setSlicedMedia(media.slice(leftPosition - 6, rightPosition - 6));
+    }
+  };
+
+  const handleRight = () => {
+    if (rightPosition < arrayLength) {
+      setLeftPosition(leftPosition + 6);
+      setRightPosition(rightPosition + 6);
+      setSlicedMedia(media.slice(leftPosition + 6, rightPosition + 6));
+    }
+  };
+
+  return { slicedMedia, handleLeft, handleRight };
 }
