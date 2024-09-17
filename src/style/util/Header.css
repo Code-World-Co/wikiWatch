@@ -1,7 +1,5 @@
 .navWeb {
     display: flex;
-    background-color: var(--color-background);
-    justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     height: 60px;
@@ -12,7 +10,7 @@
     left: 0;
     width: 100%;
     z-index: 99;
-    border-bottom: 2.5px solid var(--color-text-effect);
+    gap: 40px;
 }
     
 .navWeb .logo{
@@ -26,21 +24,20 @@
 
 .navWeb .navWeb-link{
     display: flex;
-    flex-basis: 250px;
-    justify-content: space-between;
+    gap: 30px;
     align-items: center;
+    font-size: 1.3rem;
 }
 
 .navWeb .link {
     display: flex;
     align-items: center;
-    font-size: 1.5rem;
-    background-color: var(--color-text-effect);
-    padding: 2px 20px;
-    border-radius:  20px 5px;
-    font-weight: 1000;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--color-title);
     gap: 2px;
+}
+
+.navWeb .link:hover{
+    color: var(--color-title)
 }
 
 
@@ -49,7 +46,7 @@
     color:var(--color-title);
 }
 
-@media screen and (width <= 450px){
+@media screen and (max-width: 450px){
     .navWeb {
         flex-direction: column;
         flex-wrap: nowrap;
@@ -70,4 +67,22 @@
     .navWeb .link {
         font-size: 1.2rem;
     }
+}
+
+.navWeb .searchContainer{
+    justify-self: flex-end;
+}
+
+.navWeb .searchContainer .textField{
+    padding: 5px 10px; 
+    border-radius: 20px;
+    border: 1px solid var(--color-title);
+    width: 40vw;
+    color: black;
+}
+
+.navWeb .searchContainer .textField:focus{
+    outline: none;
+    color: black;
+    font-family: 'Roboto', sans-serif;
 }

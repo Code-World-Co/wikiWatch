@@ -2,26 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { apiKey } from "../data/api";
 import axios from 'axios';
 
-/*
-const links = {
-    base: 'https://api.themoviedb.org/3/movie/',
-    latest: 'https://api.themoviedb.org/3/movie/latest?language=en-US',
-    popular: 'https://api.themoviedb.org/3/movie/popular?language=en-US',
-    top_rated: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US',
-    upcoming: 'https://api.themoviedb.org/3/movie/upcoming?language=en-US',
-    now_playing: 'https://api.themoviedb.org/3/movie/now_playing?language=en-US',
-  };
-  
-  */
-  //const popularMovies = useGetDataMedia({type:'movie', category:'popular', language:'en-US'})
- // console.log(popularMovies)
 
 
 export  function useGetDataMedia({ type, category, language}) {
-    const url = 'https://api.themoviedb.org/3/';
     const [data, setData] = useState(null);
     useEffect(() => {       
         async function fetchData() {
+            const url = 'https://api.themoviedb.org/3/';
             const response = await axios.get(
                 (category ) ? `${url}${type}/${category}?language=${language}` :  `${url}${type}/11?`
                 , {
@@ -43,6 +30,17 @@ export  function useGetDataMedia({ type, category, language}) {
         fetchData();
     }, [type]);
     return  data;
+}
+
+export function useSearchParams({text,category}){
+  const [result,seResult] = useState([]);
+  useEffect(async()=>{
+    const url = 'https://api.themoviedb.org/3/';
+    const textSearch = search.split(' ').join('%20');
+    const response = await axios.get(`${url}/search/${category}?api_key=${apiKey}&language=en-US&query=${textSearch}`); 
+    setResult = [...response.data.results];
+  },[text])
+  return result;
 }
 
 export function useMediaPagination(media) {

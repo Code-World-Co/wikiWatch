@@ -12,6 +12,7 @@ import { MdLocalMovies, MdMovieFilter } from "react-icons/md";
 import { AiFillGithub } from "react-icons/ai";
 import { SlControlEnd } from "react-icons/sl";
 import { SiSteelseries } from "react-icons/si";
+import { NavLink } from "react-router-dom";
 
 export function Home() {
   const [selectedMediaType, setSelectedMediaType] = useState('movie');
@@ -40,7 +41,11 @@ export function Home() {
 
       <section className="homePage">
         <h1 className="title"><span className="firstWord-title title">WIKI</span> WATCH</h1>
-        <h2>You will find the best information of movies and series</h2>
+        <h2>You will find the best information of your favorites movies and series!</h2>
+        <nav className="navWeb-link">
+          <NavLink to="/movies" className='link'>Movies</NavLink>
+          <NavLink to="/tv" className='link'>Series</NavLink>
+        </nav>
         <div className="nav">
           <a className="link" href="https://github.com/Code-World-Co/WikiWatch">
             <AiFillGithub className="icon"/>

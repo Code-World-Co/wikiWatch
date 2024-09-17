@@ -35,7 +35,6 @@ function App() {
       {
         valueAlert !== null ?
           <div>
-            <Header />
             <Routes>
               <Route path="/WikiWatch/" element={<Home />} />
               <Route path="/movies" element={<Movies isAdult={valueAlert} />} />
