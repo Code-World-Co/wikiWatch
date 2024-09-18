@@ -6,53 +6,54 @@ import { AiFillGithub } from "react-icons/ai";
 import '../style/util/Header.css'
 import { useEffect,useState } from "react";
 
-export function Header() {
-
+export function Header({ handleSearchData }) {
   const onclick = () => {
     window.scrollTo(0, 0);
-  }
+  };
 
   return (
     <header className="navWeb">
-
-      <Link to="/WikiWatch/" className="logo" onClick={onclick}  > 
+      <Link to="/WikiWatch/" className="logo" onClick={onclick}>
         <h1 className="title">
-        <span className="firstWord-title title">WIKI</span>WATCH
+          <span className="firstWord-title title">WIKI</span>WATCH
         </h1>
       </Link>
 
       <nav className="navWeb-link">
-        <NavLink to="/movies" className='link'>Movies</NavLink>
-        <NavLink to="/tv" className='link'>Series</NavLink>
+        <NavLink to="/movies" className="link">Movies</NavLink>
+        <NavLink to="/tv" className="link">Series</NavLink>
         <a className="link" href="https://github.com/Code-World-Co/WikiWatch">
-            <AiFillGithub className="icon"/>
+          <AiFillGithub className="icon" />
         </a>
       </nav>
 
-      <SearchForm />      
-
+      <SearchForm handleSearchData={handleSearchData} />
     </header>
   );
 }
 
-
-export function SearchForm() {
-  const [search, setSearch] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+export function SearchForm({ handleSearchData }) {
+  const [searchForm, setSearchForm] = useState("");
+  const [searchResultsForm, setSearchResultsForm] = useState([]);
 
   const handleSearch = (e) => {
-    setSearch(e.target.value);
+    setSearchForm(e.target.value);
   };
 
   useEffect(() => {
     const apiKey = '5cec1a15e2c219c4f08d84958efb00e7';
+    const textSearch = searchForm.split(' ').join('%20');
     fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${textSearch}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data.results);
-        setSearchResults(data.results);
+        setSearchResultsForm(data.results);
       });
-  }, [search]);
+  }, [searchForm]);
+
+  useEffect(() => {
+    handleSearchData(searchResultsForm);
+  }, [searchResultsForm]);
 
   return (
     <div className="searchContainer">

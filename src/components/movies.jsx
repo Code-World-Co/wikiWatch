@@ -1,19 +1,39 @@
 import { SectionMedia } from "./sectionMedia";
 import { useGetDataMedia } from "../hooks/useGetDataMedia";
 import { Header } from "./Header";
+import { useEffect, useState } from "react";
 
-export function Movies({ isAdult }) {
-    
+export function Movies() {
+    const [searchResults, setSearchResults] = useState([]);
+    const handleSearchData = (data) => {
+        setSearchResults(data);
+    };
+    useEffect(()=>{
+        console.log(searchResults);
+    },[searchResults])
+
+    const topRated = useGetDataMedia({type:'movie', category:'top_rated', language:'en-US'});
+    const upcoming = useGetDataMedia({type:'movie', category:'upcoming', language:'en-US'});
+    const nowPlaying = useGetDataMedia({type:'movie', category:'now_playing', language:'en-US'});
+
     return (
-
-        <>
-        <Header/>
+        <main>
+        <Header handleSearchData = {handleSearchData} />
         <section className="movies">
+        {searchResults.length > 0 ?
+          <SectionMedia key={'search'} title={'Search Results'} media = {searchResults} /> : 
+        
+          <div>
+            <SectionMedia key={'top_rated'} title={'Top Rated'} media = {topRated} />
+            <SectionMedia key={'upcoming'} title={'Upcoming'} media = {upcoming} />
+            <SectionMedia key={'now_playing'} title={'Now Playing'} media = {nowPlaying} />
+          </div>
+        }
+    
+        
             
-            <SectionMedia key={'top_rated'} title={'Top Rated'} media = {useGetDataMedia({type:'movie', category:'top_rated', language:'en-US'})} />
-            <SectionMedia key={'upcoming'} title={'Upcoming'} media = {useGetDataMedia({type:'movie', category:'upcoming', language:'en-US'})} />
-            <SectionMedia key={'now_playing'} title={'Now Playing'} media = {useGetDataMedia({type:'movie', category:'now_playing', language:'en-US'})} />
         </section>
-        </>
+        </main>
     );
 }
+
