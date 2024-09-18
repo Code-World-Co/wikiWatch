@@ -46,8 +46,16 @@ export function SearchForm({ handleSearchData }) {
     fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${textSearch}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.results);
-        setSearchResultsForm(data.results);
+        const result = data.results.map ((item)=>{
+          return {
+            id: item.id,
+            poster: item.poster_path,
+            vote_average: item.vote_average.toFixed(1),
+            title: item.title || item.name,
+            overview: item.overview
+          };
+        })
+        setSearchResultsForm(result );
       });
   }, [searchForm]);
 

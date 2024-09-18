@@ -29,9 +29,6 @@ export function Movies() {
             <SectionMedia key={'now_playing'} title={'Now Playing'} media = {nowPlaying} />
           </div>
         }
-    
-        
-            
         </section>
         </main>
     );
