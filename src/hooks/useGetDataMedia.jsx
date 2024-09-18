@@ -32,16 +32,35 @@ export  function useGetDataMedia({ type, category, language}) {
     return  data;
 }
 
-export function useSearchParams({text,category}){
-  const [result,seResult] = useState([]);
-  useEffect(async()=>{
-    const url = 'https://api.themoviedb.org/3/';
-    const textSearch = search.split(' ').join('%20');
-    const response = await axios.get(`${url}/search/${category}?api_key=${apiKey}&language=en-US&query=${textSearch}`); 
-    setResult = [...response.data.results];
-  },[text])
-  return result;
+export function useSearchData ({text,category}){
+  const [searchResults, setSearchResults] = useState([]);
+  useEffect(()=>{
+    async function fetchData() {
+      const url = 'https://api.themoviedb.org/3/';
+      const response = await axios.get(
+          `${url}${category}?language=en-US&query=${text}` 
+          , {
+          params: {
+            api_key: apiKey,
+          },
+        });
+        const result = response.data.results.map((item) => {
+          return {
+            id: item.id,
+            poster: item.poster_path,
+            vote_average: item.vote_average.toFixed(1),
+            title: item.title || item.name,
+            overview: item.overview
+          };
+        });
+      setSearchResults(result); 
+  }
+  fetchData();
+  },[])
+
+  
 }
+
 
 export function useMediaPagination(media) {
   const [leftPosition, setLeftPosition] = useState(0);
@@ -64,9 +83,6 @@ export function useMediaPagination(media) {
     else  {
       cards= media.length;
     }
-
-   
-
     setCardsPerPage(cards);
     setRightPosition(leftPosition + cards);
     setSlicedMedia(media.slice(leftPosition, leftPosition + cards));

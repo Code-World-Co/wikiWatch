@@ -5,6 +5,7 @@ import { NavLink, Link } from "react-router-dom";
 import { AiFillGithub } from "react-icons/ai";
 import '../style/util/Header.css'
 import { useEffect,useState } from "react";
+import { useSearchData } from "../hooks/useGetDataMedia";
 
 export function Header({ handleSearchData }) {
   const onclick = () => {
