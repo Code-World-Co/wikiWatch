@@ -8,9 +8,6 @@ export function Movies() {
     const handleSearchData = (data) => {
         setSearchResults(data);
     };
-    useEffect(()=>{
-        console.log(searchResults);
-    },[searchResults])
 
     const topRated = useGetDataMedia({type:'movie', category:'top_rated', language:'en-US'});
     const upcoming = useGetDataMedia({type:'movie', category:'upcoming', language:'en-US'});
@@ -21,8 +18,7 @@ export function Movies() {
         <Header handleSearchData = {handleSearchData} />
         <section className="movies">
         {searchResults.length > 0 ?
-          <SectionMedia key={'search'} title={'Search Results'} media = {searchResults} /> : 
-        
+          <SectionMedia key={'search'}  media = {searchResults} /> :     
           <div>
             <SectionMedia key={'top_rated'} title={'Top Rated'} media = {topRated} />
             <SectionMedia key={'upcoming'} title={'Upcoming'} media = {upcoming} />

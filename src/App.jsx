@@ -42,7 +42,6 @@ function App() {
               <Route path="/tv/:id" element={<TvInfo />} />
               <Route path="/tv" element={<Tv isAdult={valueAlert} />} />
               <Route path="/all/:category/:media" element={<All />} />
-
             </Routes>
             <Footer />
           </div>

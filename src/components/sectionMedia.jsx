@@ -45,24 +45,57 @@ export function SectionMedia({ title, media }) {
     return null;
   }
 
-  const { slicedMedia, handleLeft, handleRight } = useMediaPagination(media);
+  const { slicedMedia } = useMediaPagination(media);
 
   return (
     <section className="sectionMedia">
-      <header className="titleContainer">
-        <h2 className="title">{title}</h2>
-        <div className="linkContainer">
-          <Link className="link" to="/">
-            More 
-          </Link>
-        </div>
-      </header>
+      {title && (
+        <header className="titleContainer">
+          <h2 className="title">{title}</h2>
+          <div className="linkContainer">
+            <Link className="link" to="/">
+              More
+            </Link>
+          </div>
+        </header>
+      )}
       <section className="cardsContainer">
         {slicedMedia.map((item) => (
-          <MediaCard key={item.id} pinture={item.poster} voteAverage={item.vote_average} title={item.title} overview={item.overview} />
+          <MediaCard
+            key={item.id}
+            pinture={item.poster}
+            voteAverage={item.vote_average}
+            title={item.title}
+            overview={item.overview}
+          />
         ))}
-       
       </section>
     </section>
+  );
+}
+
+
+export function SectionArticule({ media }) {
+  if (!media) {
+    return null;
+  }
+
+  return (
+    <main className="poster">
+        <img
+          className="pinture"
+          src={media.poster ? 'https://image.tmdb.org/t/p/original' + media.poster : cinePhoto}
+          alt="Movie Poster"
+        />
+        <div className="content">
+          <h2 className="title">{media.title}</h2>
+          <p className="overview">{media.overview}</p>
+          <div className="rating">
+            <CiStar className="icon" />
+            <span className="text">{media.vote_average}</span>
+          </div>
+        </div>
+        
+    </main>
   );
 }

@@ -5,7 +5,7 @@ import { CiStar, CiRead, CiMedal } from 'react-icons/ci';
 //import image
 import cinePhoto from "../images/pexels-tima-miroshnichenko-7991378.jpg";
 
-
+/*
 export function LatestMovie({latest, latest : {genres = []}}) {
   //info of the latest movie
   return (
@@ -63,3 +63,6 @@ export function LatestMovie({latest, latest : {genres = []}}) {
     </section>
   );
 }
+
+
+*/

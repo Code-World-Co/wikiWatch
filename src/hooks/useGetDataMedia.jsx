@@ -3,62 +3,96 @@ import { apiKey } from "../data/api";
 import axios from 'axios';
 
 
+export function useGetLatestMedia({ type, language }) {
+  const [latestMedia, setLatestMedia] = useState(null);
 
-export  function useGetDataMedia({ type, category, language}) {
-    const [data, setData] = useState(null);
-    useEffect(() => {       
-        async function fetchData() {
-            const url = 'https://api.themoviedb.org/3/';
-            const response = await axios.get(
-                (category ) ? `${url}${type}/${category}?language=${language}` :  `${url}${type}/11?`
-                , {
-                params: {
-                  api_key: apiKey,
-                },
-              });
-              const result = response.data.results.map((item) => {
-                return {
-                  id: item.id,
-                  poster: item.poster_path,
-                  vote_average: item.vote_average.toFixed(1),
-                  title: item.title || item.name,
-                  overview: item.overview
-                };
-              });
-            setData(result); 
-        }
-        fetchData();
-    }, [type]);
-    return  data;
+  useEffect(() => {
+    async function fetchData() {
+      const url = 'https://api.themoviedb.org/3/';
+      const response = await axios.get(`${url}${type}/latest?language=${language}`, {
+        params: {
+          api_key: apiKey,
+        },
+      });
+      const result = {
+        id: response.data.id,
+        adult: response.data.adult,
+        status: response.data.status,
+        title: response.data.title,
+        overview: response.data.overview,
+        poster: response.data.poster_path,
+        genres: response.data.genres}
+      setLatestMedia(result);
+    }
+    fetchData();
+  }, [type, language]);
+
+  return latestMedia;
 }
+      
 
-export function useSearchData ({text,category}){
-  const [searchResults, setSearchResults] = useState([]);
-  useEffect(()=>{
+
+
+export function useGetDataMedia({ type, category, language }) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
     async function fetchData() {
       const url = 'https://api.themoviedb.org/3/';
       const response = await axios.get(
-          `${url}${category}?language=en-US&query=${text}` 
-          , {
+        category ? `${url}${type}/${category}?language=${language}` : `${url}${type}/11?`,
+        {
           params: {
             api_key: apiKey,
           },
-        });
-        const result = response.data.results.map((item) => {
-          return {
-            id: item.id,
-            poster: item.poster_path,
-            vote_average: item.vote_average.toFixed(1),
-            title: item.title || item.name,
-            overview: item.overview
-          };
-        });
-      setSearchResults(result); 
-  }
-  fetchData();
-  },[])
+        }
+      );
+      const result = response.data.results.map((item) => {
+        return {
+          id: item.id,
+          poster: item.poster_path,
+          vote_average: item.vote_average.toFixed(1),
+          title: item.title || item.name,
+          overview: item.overview,
+        };
+      });
+      setData(result);
+    }
+    fetchData();
+  }, [type, category, language]);
 
-  
+  return data;
+}
+
+export function useSearchData({ text, category }) {
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const url = 'https://api.themoviedb.org/3/search/';
+      const response = await axios.get(
+        `${url}${category}?language=en-US&query=${text}`,
+        {
+          params: {
+            api_key: apiKey,
+          },
+        }
+      );
+      const result = response.data.results.map((item) => {
+        return {
+          id: item.id,
+          poster: item.poster_path,
+          vote_average: item.vote_average.toFixed(1),
+          title: item.title || item.name,
+          overview: item.overview,
+        };
+      });
+      setSearchResults(result);
+    }
+    fetchData();
+  }, [text, category]);
+
+  return searchResults;
 }
 
 

@@ -1,68 +1,65 @@
+.home{
+  display:  grid;
+  grid-template-columns:  1fr;
+}
+
 .home .trailer {
     width: 100%;
     height: 100vh;
     position: relative;
-    top: 0;
-    left: 0;
 }
 
-.home .background {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: linear-gradient(0deg, rgba(4, 16, 38) 0%, rgba(255, 255, 255, 0) 100%);
-}
-
-.home .video {
+.home .trailer .video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     background-color: black;
+    position: absolute;
+    z-index: -2;
 }
 
-.home .homePage {
+.home .trailer .homePage {
     width: 100%;
-    height: calc(100% - 60px);
-    position: absolute;
-    top: 2px;
-    left: 0;
+    height: 100%;
+    font-size: 1.2em;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: end;
     flex-direction:column;
-    gap: 6%;
-    font-size: 1.2em;
-    padding-bottom:10%;
+    gap: 20px;
+    padding: 10%;
 }
 
-.homePage .title {
+.home .trailer .homePage .title {
     font-family: 'Roboto', cursive;
     font-size: 4.7rem;
     font-weight: 700;
 }
 
-.homePage .firstWord-title {
+.home .trailer .homePage .firstWord-title {
     color: var(--color-title);
 }
 
-.homePage .navWeb-link {
+.home .trailer .homePage .navWeb-link {
   display: flex;
   justify-content: center;
   gap: 20px;
 }
 
-.homePage .navWeb-link .link {
+.home .trailer .homePage .navWeb-link .link {
   font-size: 1.5rem;
   padding: 2px 20px;
   border-radius: 20px;
   font-family: var(--color-title);
   transition: 500ms;
+  background-color: var(--color-text-effect);
   
 }
 
+.home .trailer .homePage .navWeb-link .link:hover {
+  background-color: var(--color-title);
+}
 
 
 .homePage .nav{
@@ -80,11 +77,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 1000;
 }
 
 .homePage .nav:hover{
   left: -70px;
-
 }
 
 .homePage .nav .link{
@@ -107,19 +104,12 @@ transform: rotate(-90deg);
   transform: scale(1.2);
 }
 
-
-
 .home .boxCard {
-    height: 93vh;
-    display: grid;
-    grid-template-rows: repeat(3, minMax(1fr, 500px));
-    grid-template-columns: repeat(5, 1fr);
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    top: 0;
-    left: 0;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px 0; 
+  position: static;
 }
 
 .boxCard .boxText {
@@ -136,185 +126,3 @@ transform: rotate(-90deg);
     cursor: pointer;
 }
 
-.boxCard .boxMedia {
-    grid-column: 1 / 6;
-    grid-row: 2;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    width: 100%;
-    height: 100%;
-    justify-items: center;
-    align-content: center;
-    gap: 20px;
-    border-bottom: 7px solid var(--color-text-effect);
-}
-
-.boxCard .boxButton {
-    grid-column: 3;
-    grid-row: 3;
-    font-size: 3rem;
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-}
-
-.boxButton .button {
-    cursor: pointer;
-    color: var(--color-text);
-    border-radius: 100%;
-}
-
-.boxButton .button:hover {
-
-    scale: 1.1;
-    background-color: var(--color-title);
-    transition: 500ms;
-}
-
-
-@media screen and (width <= 450px) {
-    .home .homePage {
-        font-size: 1em;
-    }
-
-    .homePage .title{
-        font-size: 4.2rem;
-    }
-    .home .boxCard {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .boxCard .boxText {
-        grid-column: 1 / 3;
-        grid-row: 1;
-    }
-
-    .boxCard .boxButton{
-        grid-column: 1 / 3;
-        grid-row: 3;
-    }
-}
-
-.information {
-    display: flex;
-    flex-wrap: wrap-reverse;
-    align-items: center;
-    margin: 100px 0;
-    gap: 25px;
-    justify-content: space-around;
-  }
-  
-  .information .image {
-    height: 110px;
-    flex: 0.8 3 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-text-effect);
-    border-radius: 100px 100px 5px 5px;
-  }
-  
-  .information .image .fond {
-    height: 250px;
-    width: 250px;
-    border-radius: 100%;
-    background-color: var(--color-effect-title);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-  }
-  
-  .information .image .fond .icon {
-    font-size: 180px;
-    animation-name: iconInformationAnimation;
-    animation-duration: 10s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-  }
-  
-  @keyframes iconInformationAnimation {
-  
-    25% {
-      opacity: 1;
-      transform: scale(1.2);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1) rotate(360deg);
-    }
-    75% {
-      opacity: 1;
-      transform: scale(1.2) rotate(360deg);
-    }
-    
-    
-  }
-  
-  .information .text {
-    flex: 0 2 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px 20px;
-    font-weight: 500;
-  }
-  
-  .information .text ul {
-    padding: 0 20px;
-  }
-  
-  
-.prefooter{
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-}
-
-
-.prefooter .cards{
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-
-.prefooter .cards .card{
-  width: 10em;
-  height: 10em;
-  background-color: var(--color-text-effect);
-  border-radius: 16px;
-  box-shadow: 0 0 10px var(--color-effect-title);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-}
-
-.prefooter .cards .card .icon{
-  font-size: 100px;
-  transition: 500ms;
-}
-
-.prefooter .cards .card .icon:hover{
-  transform: scale(1.2);
-  
-}
-
-
-#pfCard1{
-  position: relative;
-  left: 5px;
-}
-
-#pfCard2{
-  position: relative;
-  left: 5px;
-  z-index: 2;
-  transform: scale(1.2);
-}
-
-.prefooter .text{
-  text-align: center;
-}
