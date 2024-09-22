@@ -2,51 +2,17 @@ import { useState, useEffect, useRef } from "react";
 import { apiKey } from "../data/api";
 import axios from 'axios';
 
-
-export function useGetLatestMedia({ type, language }) {
-  const [latestMedia, setLatestMedia] = useState(null);
+export function useGetPopularMedia({ type, language }) {
+  const [popularMedia, setPopularMedia] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
       const url = 'https://api.themoviedb.org/3/';
-      const response = await axios.get(`${url}${type}/latest?language=${language}`, {
+      const response = await axios.get(`${url}${type}/popular?language=${language}`, {
         params: {
           api_key: apiKey,
         },
       });
-      const result = {
-        id: response.data.id,
-        adult: response.data.adult,
-        status: response.data.status,
-        title: response.data.title,
-        overview: response.data.overview,
-        poster: response.data.poster_path,
-        genres: response.data.genres}
-      setLatestMedia(result);
-    }
-    fetchData();
-  }, [type, language]);
-
-  return latestMedia;
-}
-      
-
-
-
-export function useGetDataMedia({ type, category, language }) {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      const url = 'https://api.themoviedb.org/3/';
-      const response = await axios.get(
-        category ? `${url}${type}/${category}?language=${language}` : `${url}${type}/11?`,
-        {
-          params: {
-            api_key: apiKey,
-          },
-        }
-      );
       const result = response.data.results.map((item) => {
         return {
           id: item.id,
@@ -56,7 +22,70 @@ export function useGetDataMedia({ type, category, language }) {
           overview: item.overview,
         };
       });
-      setData(result);
+      setPopularMedia(result);
+    }
+    fetchData();
+  }, [type, language]);
+
+  return popularMedia;
+}
+export function useGetMostPopularMedia({ type, language }) {
+  const [mostPopularMedia, setMostPopularMedia] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const url = 'https://api.themoviedb.org/3/';
+      const response = await axios.get(`${url}${type}/popular?language=${language}`, {
+        params: {
+          api_key: apiKey,
+        },
+      });
+      const result = response.data.results
+        .map((item) => ({
+          id: item.id,
+          poster: item.poster_path,
+          vote_average:    item.vote_average.toFixed(1),
+          title: item.title || item.name,
+          overview: item.overview,
+          popularity: item.popularity,
+          voteAcount: item.vote_count,
+          language: item.original_language,
+          genres: item.genres,
+        }))
+        .sort((a, b) => b.vote_average - a.vote_average)[0];
+      setMostPopularMedia(result);
+    }
+    fetchData();
+  }, [type, language]);
+
+  return mostPopularMedia;
+}
+
+export function useGetDataMedia({ type, category, language }) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const url = 'https://api.themoviedb.org/3/';
+      const endpoint = category ? `${url}${type}/${category}?language=${language}` : `${url}${type}/11?language=${language}`;
+      const response = await axios.get(endpoint, {
+        params: {
+          api_key: apiKey,
+        },
+      });
+     
+      if (response.data.results) {
+        const result = response.data.results.map((item) => {
+          return {
+            id: item.id,
+            poster: item.poster_path,
+            vote_average: item.vote_average.toFixed(1),
+            title: item.title || item.name,
+            overview: item.overview,
+          };
+        });
+        setData(result);
+      }
     }
     fetchData();
   }, [type, category, language]);
@@ -82,7 +111,7 @@ export function useSearchData({ text, category }) {
         return {
           id: item.id,
           poster: item.poster_path,
-          vote_average: item.vote_average.toFixed(1),
+          vote_average: (item.vote_average)? item.vote_average.toFixed(1) : 0,
           title: item.title || item.name,
           overview: item.overview,
         };

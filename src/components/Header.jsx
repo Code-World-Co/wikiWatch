@@ -35,6 +35,7 @@ export function SearchForm({ handleSearchData }) {
   const [searchResultsForm, setSearchResultsForm] = useState([]);
   const result = useSearchData({ text: searchForm, category: "movie" });
   const handleSearch = (e) => {
+    e.preventDefault();
     setSearchForm(e.target.value);
   };
 

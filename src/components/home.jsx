@@ -2,22 +2,21 @@
 import "../style/Home.css";
 //import icons
 import { useEffect, useState } from "react";
+import { CiSearch } from "react-icons/ci";
+import { MdCancel } from "react-icons/md";
 import video from "../assets/video/trailer.mp4";
 import { AiFillGithub } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
-import { useGetDataMedia, useGetLatestMedia } from "../hooks/useGetDataMedia";
+import { useGetMostPopularMedia, useSearchData, useGetDataMedia } from "../hooks/useGetDataMedia";
 import { SectionArticule, SectionMedia } from "./sectionMedia";
 
 export function Home() {
-  const [selectedMediaType, setSelectedMediaType] = useState('movie');
-  const [media, setMedia] = useState([]);
-  const data = useGetDataMedia({ type: selectedMediaType, category: 'top_rated', language: 'en-US' });
-  const topRated = useGetDataMedia({ type: selectedMediaType, category: 'top_rated', language: 'en-US' });
-  const upComing = useGetDataMedia({ type: selectedMediaType, category: 'upcoming', language: 'en-US' });
 
-  useEffect(() => {
-    setMedia(data)
-  }, [selectedMediaType, data]);
+  const [searchText, setSearchText] = useState('');
+  const searchResults = useSearchData({ text: searchText, category: 'multi' });
+  const handleChange = (e) => {
+    setSearchText(e.target.value);
+  };
 
   return (
     <main className="home">
@@ -37,12 +36,19 @@ export function Home() {
           </div>
         </section>
       </div>
-
       <section className="boxCard">
         <section className="boxMedia">
-          <SectionArticule media={useGetLatestMedia({ type: selectedMediaType, language: 'en-US' })} />
-          <SectionMedia media={upComing} title={'Up coming'} />
-          <SectionMedia media={topRated} title={'Top Rated'} />
+          <SectionArticule media={useGetMostPopularMedia({ type: 'movie', language: 'en-US' })} />
+          <SearchForm handleChange={handleChange} />
+          {
+            (searchResults.length > 0) ? <SectionMedia media={searchResults} /> : null
+          }
+          <div>
+            <SectionMedia media={useGetDataMedia({ type: 'movie', category: 'upcoming', language: 'en-US' })} title={'Upcoming'} />
+            <SectionMedia media={useGetDataMedia({ type: 'tv', category: 'popular', language: 'en-US' })} title={'Popular TV Shows'} />
+            <SectionMedia media={useGetDataMedia({ type: 'movie', category: 'top_rated', language: 'en-US' })} title={'Top Rated Movies'} />
+            <SectionMedia media={useGetDataMedia({ type: 'tv', category: 'top_rated', language: 'en-US' })} title={'Top Rated TV Shows'} />
+          </div>
         </section>
       </section>
     </main>
@@ -50,25 +56,16 @@ export function Home() {
 }
 
 
-/*
+export function SearchForm ({handleChange}){
+  return( 
+    <section className="searchForm">
+    <form className="form">
+      <input className="textField" type="text" placeholder="Search ..." onChange={handleChange} />
+      <CiSearch className="icon" />
+    </form>
+  </section>    
+  )
+}
 
-   <SectionArticule media={useGetLatestMedia({type:selectedMediaType ,language:'en-US' })} />
-          <SectionMedia media={useGetDataMedia({ type: selectedMediaType, category: 'upcoming', language: 'en-US' })} title={'Popular'} />
 
 
- <section className="boxCard">
-  <div className="boxText">
-          <h2 className={`title-boxText ${selectedMediaType === 'movie' ? 'active' : 'effect'}`} onClick={() => setSelectedMediaType('movie')}>MOVIE</h2>
-          <h2 className={`title-boxText ${selectedMediaType !== 'movie' ? 'active' : 'effect'}`} onClick={() => setSelectedMediaType('tv')}>SERIES</h2>
-        </div>
-        <div className="boxText">
-          <h2 className={`title-boxText ${selectedMediaType === 'movie' ? 'active' : 'effect'}`} onClick={() => setSelectedMediaType('movie')}>MOVIE</h2>
-          <h2 className={`title-boxText ${selectedMediaType !== 'movie' ? 'active' : 'effect'}`} onClick={() => setSelectedMediaType('tv')}>SERIES</h2>
-        </div>
-        <motion.div className="boxMedia">
-          <SectionMedia media={media} />
-        </motion.div>
-
-      </section>
-
-*/

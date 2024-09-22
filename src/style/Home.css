@@ -108,7 +108,6 @@ transform: rotate(-90deg);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 15px 0; 
   position: static;
 }
 
@@ -126,3 +125,46 @@ transform: rotate(-90deg);
     cursor: pointer;
 }
 
+
+.searchForm {
+  display: flex;
+  justify-content: center;
+  pad: 7px;
+}
+
+.searchForm .form {
+  position: relative;
+  flex: 0.6 120 500px;
+}
+
+.searchForm .textField {
+  width: 100%;
+  padding: 10px 40px 10px 40px; /* Espacio para los íconos */
+  border-radius: 20px;
+  border: none;
+  color: var(--color-text);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  background-color: var(--color-text-effect);
+}
+
+.searchForm .textField::placeholder {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  font-weight: normal;
+}
+
+.searchForm .textField:focus {
+  outline: none;
+}
+
+.searchForm .icon {
+  position: absolute;
+  top: 30%;
+  right: 20px;
+  transform: translateY(-50%);
+  color: var(--color-text);
+  transform: scale(1.5);
+  transition: 500ms;
+  cursor: pointer;
+}

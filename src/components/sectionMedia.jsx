@@ -1,8 +1,6 @@
 import "../style/MediaCard.css";
 import { Link } from "react-router-dom";
-import { CiGrid41 } from "react-icons/ci";
-import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowLeft } from "react-icons/md";
-import { CiStar } from "react-icons/ci";
+import { CiMedal, CiRead, CiStar, CiViewList } from "react-icons/ci";
 import cinePhoto from "../images/pexels-tima-miroshnichenko-7991378.jpg";
 import { useState } from "react";
 import { useMediaPagination } from "../hooks/useGetDataMedia";
@@ -21,7 +19,7 @@ export function MediaCard({ pinture, voteAverage, title, overview }) {
 
   return (
     <div className="card" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-      <span className="label"><CiStar className="icon" />  {voteAverage}</span>
+      <span className="label"><CiStar className="icon" />  {voteAverage? voteAverage: 0}</span>
       <img className="pinture" src={
         pinture === undefined
           ? cinePhoto
@@ -33,7 +31,7 @@ export function MediaCard({ pinture, voteAverage, title, overview }) {
       {title && (
         <div className={active ? 'activeOverview' : 'desactiveOverview'}>
           <h3 className="title">{title}</h3>
-          <p className="text">{overview.split('\n')[0].substring(0, 150)}{overview.length > 100 ? '...' : ''}</p>
+          {(overview && <p className="text">{overview.split('\n')[0].substring(0, 150)}{overview.length > 100 ? '...' : ''}</p>)}
         </div>
       )}
     </div>
@@ -79,7 +77,6 @@ export function SectionArticule({ media }) {
   if (!media) {
     return null;
   }
-
   return (
     <main className="poster">
         <img
@@ -88,11 +85,25 @@ export function SectionArticule({ media }) {
           alt="Movie Poster"
         />
         <div className="content">
-          <h2 className="title">{media.title}</h2>
+          <h2 className="title">{media.title}<h3 className="subtitle">{media.language}</h3> </h2>
           <p className="overview">{media.overview}</p>
           <div className="rating">
+            <div className="info">
+            <CiRead className="icon" />
+            <span className="text"><span>Views</span>{media.popularity}</span>
+            </div>
+            <div className="info">
             <CiStar className="icon" />
-            <span className="text">{media.vote_average}</span>
+            <span className="text"><span>Vote Averague </span>{media.vote_average}</span>
+            </div>
+            <div className="info">
+            <CiMedal className="icon" />
+            <span className="text"><span>Vote Acount </span>{media.voteAcount}</span>
+            </div>
+          </div>
+          <div className="buttons">
+            <button className="button">Watch Trailer</button>
+            <button className="button">More Info</button>
           </div>
         </div>
         
