@@ -10,7 +10,10 @@ export function Comment({autor,avatar,content,dateReleased}){
       <header>
         <section>
           <div>
-            <img src={avatar} alt="avatar" />
+            {
+              avatar && <img src={avatar} alt="avatar" />
+            }
+            
           </div>
           <h5>{autor}</h5>
         </section>
@@ -27,6 +30,7 @@ export function MovieInfo() {
   const {type} = useParams();
 
   const details = useGetDetailsData({id, type});
+  console.log(details);
 
   return (
     <main>
@@ -36,17 +40,7 @@ export function MovieInfo() {
             <h2>Reviews</h2>
           </header>
           <div>
-            {
-              details.reviews && details.reviews.map((item) => (
-                <Comment
-                  key={item.id}
-                  autor={item.autor}
-                  avatar={item.avatar}
-                  content={item.content}
-                  dateReleased={item.dateReleased}
-                />
-              ))
-            }
+        
           </div>
         </section>
       <SectionMedia media={useSimilarData({id, type})} title={'Similar'} type={type}/>
