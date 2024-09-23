@@ -1,9 +1,9 @@
 import "../style/MediaCard.css";
 import { Link } from "react-router-dom";
-import { CiMedal, CiRead, CiStar, CiViewList } from "react-icons/ci";
+import { CiMedal, CiRead, CiStar } from "react-icons/ci";
 import cinePhoto from "../images/pexels-tima-miroshnichenko-7991378.jpg";
 import { useState } from "react";
-import { useMediaPagination } from "../hooks/useGetDataMedia";
+import { useMediaPagination, useSimilarData } from "../hooks/useGetDataMedia";
 
 
 export function MediaCard({ pinture, voteAverage, title, overview }) {
@@ -38,7 +38,7 @@ export function MediaCard({ pinture, voteAverage, title, overview }) {
   );
 }
 
-export function SectionMedia({ title, media }) {
+export function SectionMedia({  media,title,type}) {
   if (!media) {
     return null;
   }
@@ -59,6 +59,7 @@ export function SectionMedia({ title, media }) {
       )}
       <section className="cardsContainer">
         {slicedMedia.map((item) => (
+          <Link className="card"  to={`/media/${item.id}/${(item.mediaType)? item.mediaType:type}`} key={item.id}>
           <MediaCard
             key={item.id}
             pinture={item.poster}
@@ -66,6 +67,7 @@ export function SectionMedia({ title, media }) {
             title={item.title}
             overview={item.overview}
           />
+          </Link>
         ))}
       </section>
     </section>
@@ -78,35 +80,64 @@ export function SectionArticule({ media }) {
     return null;
   }
   return (
-    <main className="poster">
-        <img
-          className="pinture"
-          src={media.poster ? 'https://image.tmdb.org/t/p/original' + media.poster : cinePhoto}
-          alt="Movie Poster"
-        />
-        <div className="content">
-          <h2 className="title">{media.title}<h3 className="subtitle">{media.language}</h3> </h2>
-          <p className="overview">{media.overview}</p>
-          <div className="rating">
-            <div className="info">
-            <CiRead className="icon" />
-            <span className="text"><span>Views</span>{media.popularity}</span>
-            </div>
-            <div className="info">
-            <CiStar className="icon" />
-            <span className="text"><span>Vote Averague </span>{media.vote_average}</span>
-            </div>
-            <div className="info">
-            <CiMedal className="icon" />
-            <span className="text"><span>Vote Acount </span>{media.voteAcount}</span>
-            </div>
-          </div>
-          <div className="buttons">
-            <button className="button">Watch Trailer</button>
-            <button className="button">More Info</button>
-          </div>
+    <main className="infoCard">
+        {
+          media.background&& 
+          <div className="background">
+            <img className="pinture" src={'https://image.tmdb.org/t/p/original' + media.background} alt="Movie Poster" />
+          </div> 
+        }
+
+        <div className="poster">
+          <img className="pinture" src={'https://image.tmdb.org/t/p/original' + media.poster} alt="Movie Poster" />
         </div>
-        
+        <section className="info">
+          <h2>{media.title}</h2>
+          <p>
+            {media.overview}
+          </p>
+          {
+            media.genres &&
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '2px'
+            }}>
+              <p style={{ fontWeight: 600 }}>Genres</p>
+              <div className="genres">
+              {media.genres.map((genre) => (
+                <span className="genre" key={genre.id}>{genre.name}</span>
+              ))}
+            </div>
+            </div> 
+          }
+          <div className="rating">
+            <div className="rate">
+              <CiStar className="icon" />
+              <div>
+              Views
+              </div>
+               {media.vote_average}
+            </div>
+
+            <div className="rate">
+              <CiMedal className="icon" />
+              <div>
+              Vote Average
+              </div>
+              {media.vote_average}
+            </div>
+
+            <div className="rate">
+              <CiMedal className="icon" />
+              <div>
+              Vote Count
+              </div>
+              {media.voteAcount }
+            </div>
+
+          </div>
+        </section>        
     </main>
   );
 }

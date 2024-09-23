@@ -44,10 +44,10 @@ export function Home() {
             (searchResults.length > 0) ? <SectionMedia media={searchResults} /> : null
           }
           <div>
-            <SectionMedia media={useGetDataMedia({ type: 'movie', category: 'upcoming', language: 'en-US' })} title={'Upcoming'} />
-            <SectionMedia media={useGetDataMedia({ type: 'tv', category: 'popular', language: 'en-US' })} title={'Popular TV Shows'} />
-            <SectionMedia media={useGetDataMedia({ type: 'movie', category: 'top_rated', language: 'en-US' })} title={'Top Rated Movies'} />
-            <SectionMedia media={useGetDataMedia({ type: 'tv', category: 'top_rated', language: 'en-US' })} title={'Top Rated TV Shows'} />
+            <SectionMedia media={useGetDataMedia({ type: 'movie', category: 'popular', language: 'en-US' })} title={'Upcoming'} type={'movie'}/>
+            <SectionMedia media={useGetDataMedia({ type: 'tv', category: 'popular', language: 'en-US' })} title={'Popular TV Shows'} type ={'tv'} />
+            <SectionMedia media={useGetDataMedia({ type: 'movie', category: 'top_rated', language: 'en-US' })} title={'Top Rated Movies'} type={'movie'} />
+            <SectionMedia media={useGetDataMedia({ type: 'tv', category: 'top_rated', language: 'en-US' })} title={'Top Rated TV Shows'} type={'tv'}/>
           </div>
         </section>
       </section>

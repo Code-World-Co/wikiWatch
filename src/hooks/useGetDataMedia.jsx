@@ -73,7 +73,7 @@ export function useGetDataMedia({ type, category, language }) {
           api_key: apiKey,
         },
       });
-     
+      console.log(response.data.results);
       if (response.data.results) {
         const result = response.data.results.map((item) => {
           return {
@@ -107,6 +107,7 @@ export function useSearchData({ text, category }) {
           },
         }
       );
+      console.log(response.data.results);
       const result = response.data.results.map((item) => {
         return {
           id: item.id,
@@ -114,6 +115,7 @@ export function useSearchData({ text, category }) {
           vote_average: (item.vote_average)? item.vote_average.toFixed(1) : 0,
           title: item.title || item.name,
           overview: item.overview,
+          mediaType: item.media_type
         };
       });
       setSearchResults(result);
@@ -122,6 +124,82 @@ export function useSearchData({ text, category }) {
   }, [text, category]);
 
   return searchResults;
+}
+
+export function useGetDetailsData({id,type,language}){
+  const [details, setDetails] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const url = 'https://api.themoviedb.org/3/';
+      const response = await axios.get(`${url}${type}/${id}?language=${language}`, {
+        params: {
+          api_key: apiKey,
+        },
+      });
+      const result = {
+        id: response.data.id,
+        poster: response.data.poster_path ,
+        background: response.data.backdrop_path,
+        vote_average: response.data.vote_average.toFixed(1),
+        voteAcount: response.data.vote_count,
+        title: response.data.title || response.data.name,
+        overview: response.data.overview,
+        genres: response.data.genres,
+      }
+
+      const reviews = await axios.get(`${url}${type}/${id}/reviews?language=${language}`, {
+        params: {
+          api_key: apiKey,
+        },
+      });
+      console.log(reviews.data.results);
+      result.reviews = reviews.data.results.map((item) => {
+        return {
+          id: item.id,
+          autor: item.author,
+          avatar: item.avatar_path,
+          content: item.content,
+          dateReleased: item.created_at
+        }
+      });
+      console.log(result);
+  
+      setDetails(result);
+    }
+    fetchData();
+  }, [id, type, language]);
+
+  return details;
+}
+
+export function useSimilarData({id,type,language}){
+  const [similar, setSimilar] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const url = 'https://api.themoviedb.org/3/';
+      const response = await axios.get(`${url}${type}/${id}/similar?language=${language}`, {
+        params: {
+          api_key: apiKey,
+        },
+      });
+      console.log(response.data.results);
+      const result = response.data.results.map((item) => {
+        return {
+          id: item.id,
+          poster: item.poster_path,
+          vote_average: item.vote_average.toFixed(1),
+          title: item.title || item.name,
+          overview: item.overview,
+        };
+      });
+      setSimilar(result);
+    }
+    fetchData();
+  }, [id, type, language]);
+
+  return similar;
 }
 
 
